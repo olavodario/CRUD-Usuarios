@@ -123,6 +123,11 @@ public class FrmMain extends javax.swing.JFrame {
         });
 
         jButton4.setText("Excluir");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -154,7 +159,7 @@ public class FrmMain extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton4))))
                     .addComponent(jLabel1))
-                .addContainerGap(383, Short.MAX_VALUE))
+                .addContainerGap(380, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,6 +195,11 @@ public class FrmMain extends javax.swing.JFrame {
                 "Código", "Nome", "Senha"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jLabel5.setText("Banco de Dados");
@@ -262,12 +272,34 @@ public class FrmMain extends javax.swing.JFrame {
         usuario.setSenha(jTextFieldSenha.getText());
         
         usuario.cadastrar();
+        carregarTabelaTodos();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-               
+        usuario.setId(Integer.parseInt(jTextFieldCod.getText()));
+        usuario.setName(jTextFieldName.getText());
+        usuario.setSenha(jTextFieldSenha.getText());
+        
+        usuario.editar();
+        carregarTabelaTodos();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int linha = jTable1.getSelectedRow();
+        
+        jTextFieldCod.setText(jTable1.getValueAt(linha, 0).toString());
+        jTextFieldName.setText(jTable1.getValueAt(linha, 1).toString());
+        jTextFieldSenha.setText(jTable1.getValueAt(linha, 2).toString());       
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        usuario.setId(Integer.parseInt(jTextFieldCod.getText()));
+        usuario.deletar();
+        carregarTabelaTodos();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
