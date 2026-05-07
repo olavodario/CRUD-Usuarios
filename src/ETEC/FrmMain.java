@@ -288,10 +288,11 @@ public class FrmMain extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int linha = jTable1.getSelectedRow();
-        
-        jTextFieldCod.setText(jTable1.getValueAt(linha, 0).toString());
-        jTextFieldName.setText(jTable1.getValueAt(linha, 1).toString());
-        jTextFieldSenha.setText(jTable1.getValueAt(linha, 2).toString());       
+        usuario.setId(Integer.parseInt(jTable1.getValueAt(linha, 0).toString()));
+        usuario.buscar();
+        jTextFieldCod.setText(String.valueOf(usuario.getId()));
+        jTextFieldName.setText(usuario.getName());
+        jTextFieldSenha.setText(usuario.getSenha());    
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

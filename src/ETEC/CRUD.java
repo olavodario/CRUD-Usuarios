@@ -44,6 +44,16 @@ public class CRUD {
         this.senha = senha;
     }
     
+    public String criptografar(String texto) {
+        char[] chars = texto.toCharArray();
+
+        for (int i = 0; i < chars.length; i++) {
+            chars[i] = (char) (chars[i] ^ 5);
+        }
+
+        return new String(chars);
+    }
+    
     public void cadastrar() {
         String sql = "INSERT INTO usuario (nome, senha) VALUES (?, ?)";
         try (Connection conn = Conexao.getConexao();
@@ -51,7 +61,7 @@ public class CRUD {
             
             // O PreparedStatement usa os valores que você setou via JPanel
             stmt.setString(1, this.name); 
-            stmt.setString(2, this.senha);
+            stmt.setString(2, criptografar(this.senha));
             stmt.executeUpdate();
             
         } catch (SQLException e) {
@@ -67,7 +77,7 @@ public class CRUD {
             
             // O PreparedStatement usa os valores que você setou via JPanel
             stmt.setString(1, this.name); 
-            stmt.setString(2, this.senha);
+            stmt.setString(2, criptografar(this.senha));
             stmt.setInt(3, this.id);
             stmt.executeUpdate();
             
@@ -88,7 +98,7 @@ public class CRUD {
             
             if (rs.next()) {
             this.name = rs.getString("nome");
-            this.senha = rs.getString("senha");
+            this.senha = criptografar(rs.getString("senha"));
         } else {
             throw new RuntimeException("Usuário não encontrado");
         }
@@ -115,6 +125,39 @@ public class CRUD {
         throw new RuntimeException("Erro ao remover: " + e.getMessage());
     }
 }
-    
+    public boolean verificarLogin() {
+
+    if (!this.name.equals("Olavo")) {
+        throw new RuntimeException("Usuário não tem permissão para acessar o banco");
+    }
+
+    String sql = "SELECT senha FROM usuario WHERE nome = ?";
+
+    try (Connection conn = Conexao.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, this.name);
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+
+            String senhaBanco = (rs.getString("senha"));
+            String senhaDigitada = criptografar(this.senha);
+
+            if (senhaDigitada.equals(senhaBanco)) {
+                return true;
+            } else {
+                throw new RuntimeException("Senha incorreta");
+            }
+
+        } else {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro no login: " + e.getMessage());
+    }
+}
     
 }
